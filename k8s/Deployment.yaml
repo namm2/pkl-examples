@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    ct_team: cloud-tools
+    app: guestbook
+    tier: frontend
+  name: pkl-demo
+  namespace: test
+spec:
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - image: gcr.io/google-samples/gb-frontend:v4
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 8080
+        name: gb-frontend
+  replicas: 3
+  selector:
+    matchLabels:
+      app: guestbook
+      tier: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pkl-demo
+  namespace: test
+spec:
+  selector:
+    app: guestbook
+    tier: frontend
