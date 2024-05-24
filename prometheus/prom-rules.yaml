@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pkl-prometheus-rule-demo
+  namespace: prometheus
+  labels:
+    ct_owner: cloud-tools
+spec:
+  groups:
+  - name: recording_rules
+    interval: 1m
+    rules:
+    - record: job:http_inprogress_requests:sum
+      expr: sum by (job) (http_inprogress_requests)
