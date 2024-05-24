@@ -1,0 +1,2 @@
+open module prometheus
+extends "@io.prometheus/Rule.pkl"

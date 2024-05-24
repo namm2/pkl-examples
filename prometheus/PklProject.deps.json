@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "resolvedDependencies": {
+    "package://pkg.pkl-lang.org/pkl-pantry/io.prometheus@1": {
+      "type": "remote",
+      "uri": "projectpackage://pkg.pkl-lang.org/pkl-pantry/io.prometheus@1.1.1",
+      "checksums": {
+        "sha256": "010b75bdadfa57becbd9878d87d4a19d7465c7b78a48616f486160086204972f"
+      }
+    }
+  }
+}

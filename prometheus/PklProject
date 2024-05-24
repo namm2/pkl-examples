@@ -1,0 +1,7 @@
+amends "pkl:Project"
+
+dependencies {
+  ["io.prometheus"] {
+  	uri = "package://pkg.pkl-lang.org/pkl-pantry/io.prometheus@1.1.1"
+  }
+}

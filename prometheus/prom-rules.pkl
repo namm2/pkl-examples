@@ -1,0 +1,29 @@
+// import "package://pkg.pkl-lang.org/pkl-pantry/io.prometheus@1.1.1"
+// import "package://pkg.pkl-lang.org/pkl-pantry/io.prometheus@1.1.1#/Rule.pkl"
+// extends "@io.prometheus/Rule.pkl"
+extends "Template.pkl"
+
+apiVersion = "monitoring.coreos.com/v1"
+kind = "PrometheusRule"
+metadata {
+	name = "pkl-prometheus-rule-demo"
+	namespace = "prometheus"
+	labels {
+		["ct_owner"] = "cloud-tools"
+	}
+}
+spec {
+	groups {
+	  new RecordingRuleGroup {
+	    name = "recording_rules"
+	    interval = 1.min
+	    // partial_response_strategy = "abort"
+	    rules {
+	      new {
+	        `record` = "job:http_inprogress_requests:sum"
+	        expr = "sum by (job) (http_inprogress_requests)"
+	      }
+	    }
+	  }
+	}
+}
