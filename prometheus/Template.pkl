@@ -1,2 +1,21 @@
-open module prometheus
+open module PrometheusRule
 extends "@io.prometheus/Rule.pkl"
+
+class PrometheusRule {
+    apiVersion: String
+    kind: String
+    metadata: Metadata?
+    spec: Spec?
+}
+
+class Metadata {
+    name: String
+    namespace: String?
+    labels: Labels?
+}
+
+class Spec {
+    groups: Listing<RuleGroup>?
+}
+
+rules: Listing<PrometheusRule>

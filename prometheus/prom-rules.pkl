@@ -3,27 +3,91 @@
 // extends "@io.prometheus/Rule.pkl"
 extends "Template.pkl"
 
-apiVersion = "monitoring.coreos.com/v1"
-kind = "PrometheusRule"
-metadata {
-  name = "pkl-prometheus-rule-demo"
-  namespace = "prometheus"
-  labels {
-    ["ct_owner"] = "cloud-tools"
-  }
-}
-spec {
-  groups {
-    new RecordingRuleGroup {
-      name = "recording_rules"
-      interval = 1.min
-      // partial_response_strategy = "abort"
-      rules {
-        new {
-          `record` = "job:http_inprogress_requests:sum"
-          expr = "sum by (job) (http_inprogress_requests)"
+rules {
+  new {
+    apiVersion = "monitoring.coreos.com/v1"
+    kind = "PrometheusRule"
+    metadata {
+      name = "pkl-prometheus-rule-demo"
+      namespace = "prometheus"
+      labels {
+        ["ct_owner"] = "cloud-tools"
+      }
+    }
+    spec {
+      groups {
+        new RecordingRuleGroup {
+          name = "recording_rules"
+          interval = 1.min
+          // partial_response_strategy = "abort"
+          rules {
+            new {
+              `record` = "job:http_inprogress_requests:sum"
+              expr = "sum by (job) (http_inprogress_requests)"
+            }
+          }
         }
       }
+    }
+  }
+
+  new {
+    apiVersion = "monitoring.coreos.com/v1"
+    kind = "PrometheusRule"
+    metadata {
+      name = "pkl-prometheus-rule-demo-2"
+      namespace = "prometheus"
+      labels {
+        ["ct_owner"] = "cloud-tools"
+      }
+    }
+    spec {
+      groups {
+        new RecordingRuleGroup {
+          name = "recording_rules"
+          interval = 1.min
+          // partial_response_strategy = "abort"
+          rules {
+            new {
+              `record` = "job:http_inprogress_requests:sum"
+              expr = "sum by (job) (http_inprogress_requests)"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+output {
+  value = rules
+  renderer = new YamlRenderer {
+    isStream = true
+    // https://github.com/apple/pkl/discussions/371#discussioncomment-8929659
+    converters {
+      [Duration] = (it) ->
+        let (days = it.toUnit("d").value.toInt())
+        let (hours = it.toUnit("h").value.toInt() % 24)
+        let (minutes = it.toUnit("min").value.toInt() % 60)
+        let (seconds = it.toUnit("s").value % 60)
+          new Listing {
+            when (days != 0) {
+              days
+              "d"
+            }
+            when (hours != 0) {
+              hours
+              "h"
+            }
+            when (minutes != 0) {
+              minutes
+              "m"
+            }
+            when (seconds != 0) {
+              seconds
+              "s"
+            }
+          }.join("")
     }
   }
 }
